@@ -97,12 +97,12 @@ export function generateReportItemTemplate({ id, name, description, photoUrl, cr
         <div id="story-description" class="story-item__description">
           ${description}
         </div>
-        <div style="display:flex;gap:8px;margin-top:12px;align-items:center;">
+        <div class="story-item__actions">
           <a class="btn story-item__read-more" href="#/stories/${id}">
             Baca Selengkapnya <i class="fas fa-arrow-right"></i>
           </a>
           <button class="btn btn-outline story-item__save" data-storyid="${id}" aria-label="Simpan cerita">
-            <i class="far fa-bookmark"></i> Simpan
+            <i class="far fa-bookmark"></i>
           </button>
         </div>
       </div>

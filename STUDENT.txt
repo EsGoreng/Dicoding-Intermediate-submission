@@ -1,3 +1,4 @@
 APP_URL=http://localhost:9001/
-MAP_SERVICE_API_KEY= "umNdYAdqSGwPTnyui4oo"
-url deploy = "ceritaduniafiks.netlify.app"
+MAP_SERVICE_API_KEY= "x02r9WSjHseBBp4yxRmy"
+
+url = "https://dicodingintermediate.netlify.app/"
