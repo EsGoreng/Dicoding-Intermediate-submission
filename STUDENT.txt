@@ -1,0 +1,3 @@
+APP_URL=http://localhost:9001/
+MAP_SERVICE_API_KEY= "umNdYAdqSGwPTnyui4oo"
+url deploy = "ceritaduniafiks.netlify.app"

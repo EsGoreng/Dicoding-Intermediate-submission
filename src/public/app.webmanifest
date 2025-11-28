@@ -1,0 +1,43 @@
+{
+  "name": "CeritaDunia",
+  "short_name": "CeritaDunia",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2b8aef",
+  "description": "Aplikasi berbagi cerita - CeritaDunia",
+  "icons": [
+    {
+      "src": "images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "images/screenshoots/ss1.png",
+      "sizes": "720x1280",
+      "type": "image/png"
+    },
+    {
+      "src": "images/screenshoots/ss2.png",
+      "sizes": "720x1280",
+      "type": "image/png"
+    },
+    {
+      "src": "images/screenshoots/ss3.png",
+      "sizes": "720x1280",
+      "type": "image/png"
+    },
+    {
+      "src": "images/screenshoots/ss4.png",
+      "sizes": "720x1280",
+      "type": "image/png"
+    }
+  ]
+}
