@@ -313,19 +313,19 @@ button {
 
 :root {
   /* Brand Colors */
-  --primary-color: #3338a0; /* Main brand/action color */
-  --primary-hover-color: #272b80; /* Darker version of primary for hover */
-  --primary-light: #4b50b8; /* Lighter version of primary */
-  --accent-color: #fcc61d; /* Accent/highlight color */
-  --accent-hover: #e3b119; /* Darker version of accent for hover */
-  --background-color: #f7f7f7; /* Light background */
-  --text-color: #333333; /* Main text color */
+  --primary-color: #111827; /* Main brand/action color (dark slate) */
+  --primary-hover-color: #0b1220; /* Darker primary for hover */
+  --primary-light: #374151; /* Lighter primary */
+  --accent-color: #f59e0b; /* Accent/highlight color (amber) */
+  --accent-hover: #d97706; /* Darker accent for hover */
+  --background-color: #0b1220; /* Dark background */
+  --text-color: #e5e7eb; /* Main text color (light) */
 
   /* Derived Colors */
-  --primary-text-color: #f7f7f7; /* Text on primary color */
-  --primary-shadow-color: rgba(51, 56, 160, 0.25); /* Shadow with primary */
-  --secondary-color: #c59560; /* Secondary elements */
-  --secondary-hover: #b38550; /* Darker version of secondary */
+  --primary-text-color: #ffffff; /* Text on primary color */
+  --primary-shadow-color: rgba(2, 6, 23, 0.6); /* Shadow for dark theme */
+  --secondary-color: #374151; /* Secondary elements */
+  --secondary-hover: #4b5563; /* Darker secondary hover */
   --secondary-text-color: #ffffff; /* Text on secondary */
 }
 
