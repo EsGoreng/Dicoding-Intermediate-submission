@@ -7,7 +7,29 @@ export function isPushSupported() {
 
 export async function registerServiceWorker() {
   try {
-    const registration = await navigator.serviceWorker.register('/sw.js');
+    // Preflight fetch to detect unbuilt service worker that contains bare ESM imports
+    const resp = await fetch('/sw.js', { cache: 'no-store' });
+    let text = '';
+    if (resp && resp.ok) {
+      text = await resp.text();
+      // If the SW source contains bare imports (e.g. from 'workbox-...') it likely
+      // hasn't been processed by the build (InjectManifest). Abort registration
+      // in that case to avoid "Script evaluation failed" errors in dev.
+      const hasBareImports = /from\s+['"][^\.\/].+['"]/m.test(text) || /import\s+\{/.test(text);
+      if (hasBareImports) {
+        const err = new Error('Service worker appears unbuilt (contains bare ESM imports). Build the project to generate a production-ready sw.js.');
+        console.error('registerServiceWorker: aborted - unbuilt sw.js', err);
+        throw err;
+      }
+    }
+
+    const isImportScripts = /importScripts\s*\(/.test(text);
+    let registration;
+    if (isImportScripts) {
+      registration = await navigator.serviceWorker.register('/sw.js');
+    } else {
+      registration = await navigator.serviceWorker.register('/sw.js', { type: 'module' });
+    }
     return registration;
   } catch (error) {
     console.error('registerServiceWorker: error', error);

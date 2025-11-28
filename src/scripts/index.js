@@ -6,6 +6,7 @@ import 'leaflet/dist/leaflet.css';
 
 // Components
 import App from './pages/app';
+import { registerServiceWorker } from './utils/push';
 import Camera from './utils/camera';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -26,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Register service worker for PWA (Workbox-generated sw.js will be at project root after build)
   if ('serviceWorker' in navigator) {
     try {
-      await navigator.serviceWorker.register('/sw.js');
+      await registerServiceWorker();
       console.log('Service worker registered');
     } catch (err) {
       console.warn('Service worker registration failed', err);

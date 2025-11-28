@@ -1,11 +1,16 @@
-// Workbox precache placeholder - InjectManifest will replace self.__WB_MANIFEST
-import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
-import { registerRoute } from 'workbox-routing';
-import { CacheFirst, NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies';
-import { ExpirationPlugin } from 'workbox-expiration';
-import { CacheableResponsePlugin } from 'workbox-cacheable-response';
-import { openDB } from 'idb';
-import { BASE_URL } from '../scripts/config';
+// Non-module service worker for development: load Workbox from CDN
+// (Production build should still replace this via InjectManifest)
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/7.3.0/workbox-sw.js');
+
+const { precaching, routing, strategies, expiration, cacheableResponse } = workbox;
+const { precacheAndRoute, createHandlerBoundToURL } = precaching;
+const { registerRoute } = routing;
+const { CacheFirst, NetworkFirst, StaleWhileRevalidate } = strategies;
+const { ExpirationPlugin } = expiration;
+const { CacheableResponsePlugin } = cacheableResponse;
+
+// Define BASE_URL directly (from config)
+const BASE_URL = 'https://story-api.dicoding.dev/v1';
 
 precacheAndRoute(self.__WB_MANIFEST || []);
 
@@ -162,31 +167,6 @@ self.addEventListener('notificationclick', function (event) {
     }),
   );
 });
-
-// Background sync: process queued stories stored in IndexedDB (ceritadunia-sync-db)
-const SYNC_DB = 'ceritadunia-sync-db';
-const SYNC_STORE = 'sync-queue';
-
-async function getSyncDB() {
-  return openDB(SYNC_DB, 1, {
-    upgrade(db) {
-      if (!db.objectStoreNames.contains(SYNC_STORE)) {
-        db.createObjectStore(SYNC_STORE, { keyPath: 'id' });
-      }
-    },
-  });
-}
-
-async function getAllSyncItems() {
-  const db = await getSyncDB();
-  return db.getAll(SYNC_STORE);
-}
-
-async function removeSyncItem(id) {
-  const db = await getSyncDB();
-  return db.delete(SYNC_STORE, id);
-}
-
 async function sendQueuedItem(item) {
   try {
     const formData = new FormData();
@@ -205,6 +185,46 @@ async function sendQueuedItem(item) {
   } catch (err) {
     return false;
   }
+}
+
+// Simple IndexedDB helpers (replacement for idb.openDB used in module sw)
+const SYNC_DB = 'ceritadunia-sync-db';
+const SYNC_STORE = 'sync-queue';
+
+function openSyncDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(SYNC_DB, 1);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(SYNC_STORE)) {
+        db.createObjectStore(SYNC_STORE, { keyPath: 'id' });
+      }
+    };
+    req.onsuccess = (e) => resolve(e.target.result);
+    req.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function getAllSyncItems() {
+  const db = await openSyncDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(SYNC_STORE, 'readonly');
+    const store = tx.objectStore(SYNC_STORE);
+    const req = store.getAll();
+    req.onsuccess = () => resolve(req.result || []);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function removeSyncItem(id) {
+  const db = await openSyncDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(SYNC_STORE, 'readwrite');
+    const store = tx.objectStore(SYNC_STORE);
+    const req = store.delete(id);
+    req.onsuccess = () => resolve(true);
+    req.onerror = () => reject(req.error);
+  });
 }
 
 self.addEventListener('sync', function (event) {

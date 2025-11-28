@@ -14,6 +14,7 @@ import {
   getExistingSubscription,
   subscribeUser,
   unsubscribeUser,
+  registerServiceWorker,
 } from '../utils/push';
 import { subscribePushNotification, unsubscribePushNotification } from '../data/api';
 
@@ -84,12 +85,12 @@ export default class App {
       } else {
         // decide which button to show based on existing subscription
         (async () => {
-          try {
+            try {
             let reg = await navigator.serviceWorker.getRegistration();
             if (!reg) {
-              // try to register silently
+              // try to register silently using the safe helper which pre-checks sw.js
               try {
-                reg = await navigator.serviceWorker.register('/sw.js');
+                reg = await registerServiceWorker();
               } catch (e) {
                 console.warn('Service worker registration failed', e);
               }
