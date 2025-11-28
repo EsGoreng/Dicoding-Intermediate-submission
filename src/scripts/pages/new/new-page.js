@@ -76,19 +76,23 @@ export default class NewPage {
               <label class="new-form__location__title">Lokasi (Opsional)</label>
               <div class="new-form__location__container">
                 <div class="new-form__location__inputs">
+                  <label for="lat-input" class="new-form__location__label">Latitude</label>
                   <input 
                     type="number" 
                     id="lat-input" 
                     name="lat" 
                     placeholder="Latitude"
                     step="any"
+                    aria-labelledby="lat-input"
                   >
+                  <label for="lon-input" class="new-form__location__label">Longitude</label>
                   <input 
                     type="number" 
                     id="lon-input" 
                     name="lon" 
                     placeholder="Longitude"
                     step="any"
+                    aria-labelledby="lon-input"
                   >
                   <button id="use-current-location-btn" type="button" class="btn btn-outline" style="margin-left:8px;">Gunakan Lokasi Saya</button>
                 </div>
